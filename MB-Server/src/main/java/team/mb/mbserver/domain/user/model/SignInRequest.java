@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor
-public class SignUpRequest {
+public class SignInRequest {
 
     @NotBlank
     private String accountId;
