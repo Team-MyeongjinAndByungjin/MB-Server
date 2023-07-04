@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import team.mb.mbserver.domain.user.model.SignInRequest;
 import team.mb.mbserver.domain.user.model.SignUpRequest;
+import team.mb.mbserver.domain.user.model.TokenResponse;
 import team.mb.mbserver.domain.user.service.UserService;
 
 import javax.validation.Valid;
@@ -27,9 +29,25 @@ public class UserController {
     @Operation(summary = "유저 회원가입")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "회원가입 성공",
-                    content = @Content(schema = @Schema(hidden = true)))
+                    content = @Content(schema = @Schema(implementation = SignUpRequest.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    public void signUp(@RequestBody @Valid SignUpRequest request) {
-        userService.signUp(request);
+    public TokenResponse signUp(@RequestBody SignUpRequest request) {
+        System.out.println(request.getAccountId());
+        return userService.signUp(request);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/token")
+    @Operation(summary = "유저 로그인")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "로그인 성공",
+                    content = @Content(schema = @Schema(implementation = SignInRequest.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    public TokenResponse signIn(@RequestBody @Valid SignInRequest request) {
+        return userService.signIn(request);
     }
 }
