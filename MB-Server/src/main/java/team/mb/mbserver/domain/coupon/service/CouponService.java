@@ -12,7 +12,6 @@ import team.mb.mbserver.domain.user.entity.User;
 import team.mb.mbserver.domain.user.entity.UserRepository;
 import team.mb.mbserver.global.error.BusinessException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,6 +29,7 @@ public class CouponService {
 
         Coupon coupon = Coupon.builder()
                 .name(request.getName())
+                .price(request.getPrice())
                 .imageUrl(request.getImageUrl())
                 .expiredAt(request.getExpiredAt())
                 .user(user)
@@ -43,7 +43,7 @@ public class CouponService {
         User user = getCurrentUser();
 
         Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(404, "존재하지 않습니다."));
 
         if (user != coupon.getUser()) {
             throw new BusinessException(403, "Invalid Writer");
@@ -62,15 +62,28 @@ public class CouponService {
                         .builder()
                         .id(coupon.getId())
                         .name(coupon.getName())
+                        .price(coupon.getPrice())
                         .imageUrl(coupon.getImageUrl())
                         .expiredAt(coupon.getExpiredAt())
                         .build())
                 .toList();
     }
 
+    @Transactional
+    public void giveCoupon(Long couponId, String accountId) {
+        User currentUser = getCurrentUser();
+
+        User user = userRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new BusinessException(404, "User Not Found"));
+
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(() -> new BusinessException(404, "Coupon Not Found"));
+        coupon.giveCoupon(currentUser, user);
+    }
+
     private User getCurrentUser() {
         String accountId = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByAccountId(accountId)
-                .orElseThrow(() -> new EntityNotFoundException());
+                .orElseThrow(() -> new BusinessException(404, "User Not Found"));
     }
 }

@@ -9,8 +9,9 @@ import java.time.LocalDate;
 @Builder
 public class CouponResponse {
     private Long id;
-    private String imageUrl;
     private String name;
+    private int price;
+    private String imageUrl;
     private LocalDate expiredAt;
 }
 

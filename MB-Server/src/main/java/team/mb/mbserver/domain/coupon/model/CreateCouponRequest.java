@@ -2,8 +2,10 @@ package team.mb.mbserver.domain.coupon.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
@@ -13,9 +15,13 @@ public class CreateCouponRequest {
     @NotBlank
     private String name;
 
+    @NotNull
+    private int price;
+
     @NotBlank
     private String imageUrl;
 
-    @NotBlank
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expiredAt;
 }

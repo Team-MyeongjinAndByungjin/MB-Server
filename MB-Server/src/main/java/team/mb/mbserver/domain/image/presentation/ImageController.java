@@ -18,8 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import team.mb.mbserver.domain.image.model.ImageUrlResponse;
 import team.mb.mbserver.domain.image.service.UploadImageService;
 
-import java.util.List;
-
 @Tag(name = "이미지", description = "이미지 업로드 API 입니다.")
 @RequiredArgsConstructor
 @RestController
