@@ -1,8 +1,13 @@
 package team.mb.mbserver.global.jwt;
 
-public interface JwtProperties {
+import lombok.Getter;
+import org.springframework.stereotype.Component;
+
+@Getter
+@Component
+public class JwtProperties {
     String SECRET = "ftjygfdhhtujgb";
-    int EXPIRATION_TIME = 60000*10;
+    Long EXPIRATION_TIME = 60000*10L;
     String TOKEN_PREFIX = "Bearer ";
     String HEADER_STRING = "Authorization";
 }
