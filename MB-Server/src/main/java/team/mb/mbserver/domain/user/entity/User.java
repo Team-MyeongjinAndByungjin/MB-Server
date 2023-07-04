@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.mb.mbserver.domain.coupon.entity.Coupon;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -24,4 +24,7 @@ public class User {
     private String accountId;
 
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Coupon> coupons = new ArrayList<>();
 }
