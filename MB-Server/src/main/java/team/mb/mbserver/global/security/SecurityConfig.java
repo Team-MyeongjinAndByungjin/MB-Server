@@ -22,22 +22,24 @@ public class SecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .cors().and()
-                .formLogin().disable();
+                .cors()
 
-        http
+                .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-        http
+                .and()
                 .authorizeRequests()
                 .antMatchers("/users", "/users/token").permitAll()
+                .antMatchers("/images").permitAll()
+
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/api-docs").permitAll()
+
                 .anyRequest().authenticated()
 
-        .and()
+                .and()
                 .apply(new FilterConfig(jwtTokenProvider, objectMapper));
 
         return http.build();
