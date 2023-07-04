@@ -19,7 +19,7 @@ public class SecurityConfig {
 
         http
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http
                 .authorizeRequests()
