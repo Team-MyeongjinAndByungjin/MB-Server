@@ -32,12 +32,13 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/users", "/users/token").permitAll()
                 .antMatchers("/images").permitAll()
+                .antMatchers("/coupons/**").authenticated()
 
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/api-docs").permitAll()
 
-                .anyRequest().authenticated()
+                .anyRequest().denyAll()
 
                 .and()
                 .apply(new FilterConfig(jwtTokenProvider, objectMapper));
