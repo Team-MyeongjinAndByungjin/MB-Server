@@ -13,7 +13,6 @@ public class UploadImageService {
 
     private final S3Facade s3Facade;
 
-    @Async
     public ImageUrlResponse execute(MultipartFile image) {
 
         return new ImageUrlResponse(s3Facade.uploadImage(image));

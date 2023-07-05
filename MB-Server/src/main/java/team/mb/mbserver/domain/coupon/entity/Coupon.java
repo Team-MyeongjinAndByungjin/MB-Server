@@ -22,13 +22,16 @@ public class Coupon {
     private String name;
 
     @Column(nullable = false)
+    private int price;
+
+    @Column(nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)
-    private LocalDate expiredAt;
+    private LocalDate created_at;
 
     @Column(nullable = false)
-    private int price;
+    private LocalDate expiredAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -40,6 +43,7 @@ public class Coupon {
         this.price = price;
         this.imageUrl = imageUrl;
         this.expiredAt = expiredAt;
+        this.created_at = LocalDate.now();
         this.user = user;
     }
 
