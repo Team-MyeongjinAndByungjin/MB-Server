@@ -27,6 +27,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private String deviceToken;
+
     @OneToMany(mappedBy = "user")
     private List<Coupon> coupons = new ArrayList<>();
+
+    public void settingDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 }

@@ -1,13 +1,22 @@
 package team.mb.mbserver.domain.user.entity;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import team.mb.mbserver.domain.coupon.entity.Coupon;
 
-import java.util.Optional;
+import static team.mb.mbserver.domain.user.entity.QUser.user;
 
+@RequiredArgsConstructor
+@Component
+public class UserRepository {
 
-public interface UserRepository extends JpaRepository<User, Long> {
+    private final JPAQueryFactory queryFactory;
 
-    boolean existsByAccountId(String accountId);
-
-    Optional<User> findByAccountId(String accountId);
+    public User queryUserByCouponIn(Coupon coupon) {
+        return queryFactory
+                .selectFrom(user)
+                .where(user.coupons.contains(coupon))
+                .fetchOne();
+    }
 }

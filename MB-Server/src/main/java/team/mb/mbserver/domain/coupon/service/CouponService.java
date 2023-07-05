@@ -1,5 +1,6 @@
 package team.mb.mbserver.domain.coupon.service;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -9,8 +10,9 @@ import team.mb.mbserver.domain.coupon.entity.CouponRepository;
 import team.mb.mbserver.domain.coupon.model.CouponResponse;
 import team.mb.mbserver.domain.coupon.model.CreateCouponRequest;
 import team.mb.mbserver.domain.user.entity.User;
-import team.mb.mbserver.domain.user.entity.UserRepository;
+import team.mb.mbserver.domain.user.entity.UserJpaRepository;
 import team.mb.mbserver.global.error.BusinessException;
+import team.mb.mbserver.infrastructure.fcm.FCMFacade;
 
 import java.util.List;
 
@@ -20,7 +22,9 @@ import java.util.List;
 public class CouponService {
 
     private final CouponRepository couponRepository;
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
+    private final FirebaseMessaging firebaseMessaging;
+    private final FCMFacade fcmFacade;
 
     @Transactional
     public void saveCoupon(CreateCouponRequest request) {
@@ -29,7 +33,7 @@ public class CouponService {
 
         Coupon coupon = Coupon.builder()
                 .name(request.getName())
-                .price(request.getPrice())
+                .from(request.getFrom())
                 .imageUrl(request.getImageUrl())
                 .expiredAt(request.getExpiredAt())
                 .user(user)
@@ -43,10 +47,10 @@ public class CouponService {
         User user = getCurrentUser();
 
         Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new BusinessException(404, "존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(404, "쿠폰이 존재하지 않습니다."));
 
         if (user != coupon.getUser()) {
-            throw new BusinessException(403, "Invalid Writer");
+            throw new BusinessException(403, "쿠폰 주인이 아닙니다.");
         }
 
         couponRepository.delete(coupon);
@@ -62,8 +66,9 @@ public class CouponService {
                         .builder()
                         .id(coupon.getId())
                         .name(coupon.getName())
-                        .price(coupon.getPrice())
+                        .from(coupon.getFromUser())
                         .imageUrl(coupon.getImageUrl())
+                        .createdAt(coupon.getCreatedAt())
                         .expiredAt(coupon.getExpiredAt())
                         .build())
                 .toList();
@@ -73,17 +78,19 @@ public class CouponService {
     public void giveCoupon(Long couponId, String accountId) {
         User currentUser = getCurrentUser();
 
-        User user = userRepository.findByAccountId(accountId)
-                .orElseThrow(() -> new BusinessException(404, "User Not Found"));
+        User user = userJpaRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new BusinessException(404, "유저를 찾지 못했습니다."));
 
         Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new BusinessException(404, "Coupon Not Found"));
+                .orElseThrow(() -> new BusinessException(404, "쿠폰을 찾지 못했습니다."));
         coupon.giveCoupon(currentUser, user);
+
+        fcmFacade.notificationForCoupon(currentUser.getAccountId(), user.getDeviceToken());
     }
 
     private User getCurrentUser() {
         String accountId = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByAccountId(accountId)
-                .orElseThrow(() -> new BusinessException(404, "User Not Found"));
+        return userJpaRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new BusinessException(404, "유저를 찾지 못했습니다."));
     }
 }
