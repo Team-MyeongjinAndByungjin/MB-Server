@@ -32,10 +32,20 @@ dependencies {
 
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    implementation 'com.querydsl:querydsl-jpa'
+    annotationProcessor(
+            "javax.persistence:javax.persistence-api",
+            "javax.annotation:javax.annotation-api",
+            "com.querydsl:querydsl-apt:5.0.0:jpa"
+    )
+
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    implementation 'com.google.firebase:firebase-admin:9.1.1'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
