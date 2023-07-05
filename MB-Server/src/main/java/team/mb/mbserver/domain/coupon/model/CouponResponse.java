@@ -8,10 +8,11 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class CouponResponse {
-    private Long id;
-    private String name;
-    private int price;
-    private String imageUrl;
-    private LocalDate expiredAt;
+    private final Long id;
+    private final String name;
+    private final String from;
+    private final String imageUrl;
+    private final LocalDate createdAt;
+    private final LocalDate expiredAt;
 }
 

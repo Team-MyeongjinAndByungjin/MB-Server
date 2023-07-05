@@ -1,11 +1,10 @@
 package team.mb.mbserver.domain.image.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import team.mb.mbserver.domain.image.model.ImageUrlResponse;
-import team.mb.mbserver.global.storage.S3Facade;
+import team.mb.mbserver.infrastructure.storage.S3Facade;
 
 @RequiredArgsConstructor
 @Service

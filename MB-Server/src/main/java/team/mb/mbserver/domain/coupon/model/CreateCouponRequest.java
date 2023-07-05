@@ -15,8 +15,8 @@ public class CreateCouponRequest {
     @NotBlank
     private String name;
 
-    @NotNull
-    private int price;
+    @NotBlank
+    private String from;
 
     @NotBlank
     private String imageUrl;

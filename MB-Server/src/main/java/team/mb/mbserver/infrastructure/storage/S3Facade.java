@@ -1,4 +1,4 @@
-package team.mb.mbserver.global.storage;
+package team.mb.mbserver.infrastructure.storage;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;

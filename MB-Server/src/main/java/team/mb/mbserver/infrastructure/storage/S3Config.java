@@ -1,4 +1,4 @@
-package team.mb.mbserver.global.storage;
+package team.mb.mbserver.infrastructure.storage;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

@@ -22,13 +22,13 @@ public class Coupon {
     private String name;
 
     @Column(nullable = false)
-    private int price;
+    private String fromUser;
 
     @Column(nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)
-    private LocalDate created_at;
+    private LocalDate createdAt;
 
     @Column(nullable = false)
     private LocalDate expiredAt;
@@ -38,12 +38,12 @@ public class Coupon {
     private User user;
 
     @Builder
-    public Coupon(String name, String imageUrl, int price, LocalDate expiredAt, User user) {
+    public Coupon(String name, String imageUrl, String from, LocalDate expiredAt, User user) {
         this.name = name;
-        this.price = price;
+        this.fromUser = from;
         this.imageUrl = imageUrl;
         this.expiredAt = expiredAt;
-        this.created_at = LocalDate.now();
+        this.createdAt = LocalDate.now();
         this.user = user;
     }
 
@@ -52,5 +52,6 @@ public class Coupon {
             throw new BusinessException(401, "쿠폰 주인이 아닙니다.");
         }
         this.user = user;
+        this.fromUser = currentUser.getAccountId();
     }
 }
