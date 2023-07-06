@@ -85,7 +85,7 @@ public class CouponService {
                 .orElseThrow(() -> new BusinessException(404, "쿠폰을 찾지 못했습니다."));
         coupon.giveCoupon(currentUser, user);
 
-        fcmFacade.notificationForCoupon(currentUser.getAccountId(), user.getDeviceToken());
+        fcmFacade.notificationForCoupon(currentUser.getAccountId(), user.getDeviceToken(), coupon.getImageUrl());
     }
 
     private User getCurrentUser() {

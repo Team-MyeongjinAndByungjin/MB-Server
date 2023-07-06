@@ -14,29 +14,33 @@ public class FCMFacade {
 
     private final FirebaseMessaging firebaseMessaging;
 
-    public void notificationForCoupon(String owner, String deviceToken) {
+    public void notificationForCoupon(String owner, String deviceToken, String imageUrl) {
         Notification notification = Notification.builder()
                 .setTitle("\uD83C\uDF81 선물 도착")
                 .setBody(owner + "님에게 고마움을 표현하세요!")
+                .setImage(imageUrl)
                 .build();
 
         Message message = Message.builder()
                 .setToken(deviceToken)
                 .setNotification(notification)
+                .putData("sound", "default")
                 .build();
 
         sendMessage(message);
     }
 
-    public void notificationForCouponExpiredAt(String deviceToken) {
+    public void notificationForCouponExpiredAt(String deviceToken, String imageUrl) {
         Notification notification = Notification.builder()
                 .setTitle("😱쿠폰의 유효기간이 얼마 남지 않았어요.")
                 .setBody("😀쿠폰을 빨리 사용하세요 ㅎㅎ")
+                .setImage(imageUrl)
                 .build();
 
         Message message = Message.builder()
                 .setToken(deviceToken)
                 .setNotification(notification)
+                .putData("sound", "default")
                 .build();
 
         sendMessage(message);

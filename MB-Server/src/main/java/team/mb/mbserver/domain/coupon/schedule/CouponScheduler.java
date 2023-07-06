@@ -1,6 +1,5 @@
 package team.mb.mbserver.domain.coupon.schedule;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,12 +14,11 @@ import java.time.LocalDate;
 @Component
 public class CouponScheduler {
 
-    private final FirebaseMessaging firebaseMessaging;
     private final CouponRepository couponRepository;
     private final UserRepository userRepository;
     private final FCMFacade fcmFacade;
 
-    @Scheduled(cron = "0 1 * * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 */5 * * * *", zone = "Asia/Seoul")
     public void checkCouponExpiredAt() {
         couponRepository.findAll()
                 .stream()
@@ -31,7 +29,7 @@ public class CouponScheduler {
                 .forEach(coupon -> {
                     User user = userRepository.queryUserByCouponIn(coupon);
 
-                    fcmFacade.notificationForCouponExpiredAt(user.getDeviceToken());
+                    fcmFacade.notificationForCouponExpiredAt(user.getDeviceToken(), coupon.getImageUrl());
                 });
     }
 }
