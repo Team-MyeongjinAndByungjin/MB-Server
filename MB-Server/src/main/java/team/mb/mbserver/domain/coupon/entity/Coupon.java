@@ -49,7 +49,7 @@ public class Coupon {
 
     public void giveCoupon(User currentUser, User user) {
         if (this.user != currentUser) {
-            throw new BusinessException(401, "쿠폰 주인이 아닙니다.");
+            throw new BusinessException(403, "쿠폰 주인이 아닙니다.");
         }
         this.user = user;
         this.fromUser = currentUser.getAccountId();
